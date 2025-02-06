@@ -83,6 +83,7 @@
             <version>9.0.75</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>

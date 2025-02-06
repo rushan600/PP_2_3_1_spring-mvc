@@ -3,9 +3,11 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.User;
 import web.service.UserService;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -21,19 +23,20 @@ public class UserController {
     @GetMapping
     public String showAllUsers(Model model) {
         model.addAttribute("allUsers", userService.getAllUsers());
-        return "users.html";
+        return "users";
     }
-
 
     @GetMapping("/addNewUser")
     public String addNewUser(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
+        model.addAttribute("user", new User());
         return "adduser";
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "adduser";
+        }
         userService.saveUser(user);
         return "redirect:/users";
     }
@@ -45,14 +48,16 @@ public class UserController {
     }
 
     @GetMapping("/updateUser")
-    public String update(@RequestParam("id") int id, Model model) {
+    public String updateUser(@RequestParam("id") int id, Model model) {
         model.addAttribute("user", userService.getUser(id));
         return "updateuser";
     }
 
     @PostMapping("/user")
-    public String save(@ModelAttribute("user") User user) {
-
+    public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "updateuser";
+        }
         userService.updateUser(user);
         return "redirect:/users";
     }

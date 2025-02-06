@@ -1,6 +1,9 @@
 package web.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 @Entity
@@ -11,13 +14,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @NotNull
+    @Pattern(regexp = "^[а-яА-Яa-zA-Z\\s]+$", message = "Поле должно состоять из букв и не быть пустым")
     private String firstName;
 
-    @Column
+    @NotNull
+    @Pattern(regexp = "^[а-яА-Яa-zA-Z\\s]+$", message = "Поле должно состоять из букв и не быть пустым")
     private String lastName;
 
-    @Column
+    @NotNull(message = "Email не может быть пустым")
+    @Email(message = "Некорректный формат email")
     private String email;
 
     public User() {
